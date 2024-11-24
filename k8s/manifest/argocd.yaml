@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: fitness
-  namespace: argocd
 spec:
   project: default # Default project within ArgoCD (you can create other projects if needed)
   source:
