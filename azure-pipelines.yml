@@ -1,0 +1,49 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '31805dfe-21c6-44d0-95dd-cc329a2f145f'
+  imageRepository: 'fitness'
+  containerRegistry: 'fitnesscontainer.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/dockerfile'
+  tag: '$(Build.BuildId),latest'
+
+pool:
+ name: 'azureagent'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        containerRegistry: 'fitnesscontainer'
+        repository: '$(imageRepository)'
+        command: 'buildAndPush'
+        Dockerfile: '**/dockerfile'
+        tags: '$(tag)'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)/k8s/manifest'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/$(ARTIFACT_NAME)'
+        CleanTargetFolder: true
+        OverWrite: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
