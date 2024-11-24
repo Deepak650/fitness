@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: fitness
-        image: your-dockerhub-username/my-web-app:latest # Replace with your image name
+        image: fitnesscontainer.azurecr.io/fitness:latest # Replace with your image name
         ports:
         - containerPort: 8080 # Ensure this matches your Dockerfile EXPOSE port
         resources:
