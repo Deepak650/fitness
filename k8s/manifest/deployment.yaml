@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitness
+  labels:
+    app: fitness
+  namespace: prod # Define the namespace here
+spec:
+  replicas: 3 # Number of pod replicas for scaling
+  selector:
+    matchLabels:
+      app: fitness
+  template:
+    metadata:
+      labels:
+        app: fitness
+    spec:
+      containers:
+      - name: fitness
+        image: your-dockerhub-username/my-web-app:latest # Replace with your image name
+        ports:
+        - containerPort: 8080 # Ensure this matches your Dockerfile EXPOSE port
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

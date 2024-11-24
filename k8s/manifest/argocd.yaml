@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fitness
+  namespace: argocd
+spec:
+  project: default # Default project within ArgoCD (you can create other projects if needed)
+  source:
+    repoURL: 'https://github.com/Deepak650/fitness.git' # Replace with the URL of your Git repository
+    targetRevision: HEAD # Branch to deploy, usually 'main' or 'master'
+    path: kubernetes # The path in the repo where your deployment.yaml, service.yaml, and ingress.yaml are located
+  destination:
+    server: https://kubernetes.default.svc # URL of the Kubernetes cluster (default is usually fine for within the cluster)
+    namespace: prod # The namespace where your resources will be deployed
+  syncPolicy:
+    automated:
+      prune: true # Automatically delete resources that are no longer defined in Git
+      selfHeal: true # Automatically fix out-of-sync resources
+    syncOptions:
+      - CreateNamespace=true # Automatically create the namespace if it doesn't exist
