@@ -17,7 +17,7 @@ variables:
   tag: '$(Build.BuildId),latest'
 
 pool:
- name: 'azureagent'
+ name: 'fitness'
 
 stages:
 - stage: Build
